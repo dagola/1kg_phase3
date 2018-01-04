@@ -40,7 +40,7 @@ if(!is.null(resources$account)) {
 ## source /etc/profile
 ## module add ...
 <% r_version <- paste0(R.Version()$major, ".", R.Version()$minor) -%>
-module load R/<%= r_version %>
+module load R/3.3.1 ##<%= r_version %>
 
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
