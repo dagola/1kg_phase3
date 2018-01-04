@@ -5,11 +5,11 @@ source("../init.R", chdir = TRUE)
 ## load R packages ----                                                       |
 ##============================================================================+
 if(!require(pacman)) {
-  install.packages("pacman")
+  install.packages("pacman", upgrade_dependencies = FALSE)
 }
 pacman::p_load(data.table)
 if(!require(imbs)) {
-  pacman::p_install_gh("imbs-hl/imbs")
+  pacman::p_install_gh("imbs-hl/imbs", upgrade_dependencies = FALSE)
 }
 pacman::p_load(imbs)
 pacman::p_load(tools)

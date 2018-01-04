@@ -14,13 +14,11 @@ dir.create(report_dir <- file.path(main_dir, "report"),
 
 input_dir <- "/imbs/external_data/annotation_and_references/"
 input_dir_1kg_phase3 <- file.path(input_dir,
-                                  "annotation_and_references",
                                   "hapmap",
                                   "1000G",
-                                  "1000G_genotypes_phase3_20130502")
+                                  "1000GP_Phase3")
 input_dir_human_reg <- file.path(input_dir,
-                                 "annotation_and_references",
-                                 "human",
+                                 "human-ref-genomes",
                                  "b37")
 dir.create(project_dir <- "/imbs/projects/1kg_phase3",
            recursive = TRUE, showWarnings = FALSE)
@@ -46,5 +44,5 @@ dir.create(output_dir <- file.path(project_dir, "output"),
 ## external software ----
 ##============================================================================+
 plink_exec <- "plink1.9b5"
-bcftools_exec <- "bcftool1.6"
+bcftools_exec <- "bcftools1.6"
 gcta_exec <- "gcta1.26.0"
