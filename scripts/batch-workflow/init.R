@@ -23,3 +23,5 @@ set.seed(seed)
 ##============================================================================+
 ## files & dirs ----
 ##============================================================================+
+dups_file <- file.path(proc_dir, "1kg.phase3.v5a.dups")
+long_indels_file <- file.path(proc_dir, "1kg.phase3.v5a.longindels")
