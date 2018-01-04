@@ -1,0 +1,86 @@
+\documentclass{scrartcl}
+
+\usepackage{amsmath, amssymb, amsfonts}
+
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+% \usepackage{lmodern}
+\usepackage[adobe-utopia]{mathdesign}
+\usepackage[utf8]{inputenc}
+\usepackage[babel=true]{microtype}
+
+\usepackage{booktabs, longtable}
+\usepackage{pdflscape}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\usepackage{siunitx}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+
+\usepackage{hyperref}
+\definecolor{myBlue}{rgb}{0.3,0.3,0}
+
+\hypersetup{ colorlinks=true,
+  breaklinks=false,
+  linkcolor=black,
+  urlcolor = myBlue}
+
+\usepackage[sort&compress]{natbib}
+\textheight230mm
+ \parindent0mm
+
+\title{GRIFAM -- \underline{G}e\underline{r}man Myocardial \underline{i}n\underline{fa}rction analysis with \underline{M}B-MDR}
+
+\author{Damian Gola\\
+  Institut f{\"u}r Medizinische Biometrie und Statistik\\
+  Universit{\"a}t zu L{\"u}beck}
+\date{\today}
+
+\makeatletter
+
+% define a macro \Autoref to allow multiple references to be passed to \autoref
+\newcommand\Autoref[1]{\@first@ref#1,@}
+\def\@throw@dot#1.#2@{#1}% discard everything after the dot
+\def\@set@refname#1{%    % set \@refname to autoefname+s using \getrefbykeydefault
+    \edef\@tmp{\getrefbykeydefault{#1}{anchor}{}}%
+    \def\@refname{\@nameuse{\expandafter\@throw@dot\@tmp.@autorefname}s}%
+}
+\def\@first@ref#1,#2{%
+  \ifx#2@\autoref{#1}\let\@nextref\@gobble% only one ref, revert to normal \autoref
+  \else%
+    \@set@refname{#1}%  set \@refname to autoref name
+    \@refname~\ref{#1}% add autoefname and first reference
+    \let\@nextref\@next@ref% push processing to \@next@ref
+  \fi%
+  \@nextref#2%
+}
+\def\@next@ref#1,#2{%
+   \ifx#2@ and~\ref{#1}\let\@nextref\@gobble% at end: print and+\ref and stop
+   \else, \ref{#1}% print  ,+\ref and continue
+   \fi%
+   \@nextref#2%
+}
+
+\makeatother
+
+\begin{document}
+ \maketitle
+ \tableofcontents
+ \listoffigures
+ \listoftables
+ \clearpage
+
+
+<<init, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
+source("init.R")
+set.seed(seed)
+@
+
+\end{document}
+
+
+
