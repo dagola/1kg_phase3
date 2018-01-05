@@ -124,8 +124,7 @@ plink_prefixes <- tools::file_path_sans_ext(
     path = proc_dir,
     pattern = "chr(\\d|X)+.1kg.phase3.v5a.bed$",
     full.names = TRUE
-  ),
-  compression = TRUE
+  )
 )
 
 reg_name <- "1kg_phase3-exclude_dups"
@@ -140,9 +139,11 @@ reg <- imbs::load_or_create_registry(
 
 ids <- batchtools::batchMap(
   fun = imbs::plink_subset,
-  bfile = plink_prefixes,
-  output.prefix = sprintf("%s.nodups", plink_prefixes),
-  more.args = list(exec = plink_exec,
+  bed.file = sprintf("%s.bed", plink_prefixes),
+  bim.file = sprintf("%s.bim", plink_prefixes),
+  output.prefix = sprintf("%s.seximputed.nodups", plink_prefixes),
+  more.args = list(fam.file = sprintf("%s.seximputed.fam", chrX_prefix),
+                   exec = plink_exec,
                    exclude = dups_file)
 )
 
@@ -158,7 +159,7 @@ batchtools::waitForJobs()
 # Check for very long indels ----
 bim_files <- list.files(
   path = proc_dir,
-  pattern = "chr(\\d+|X).1kg.phase3.v5a.nodups.bim$",
+  pattern = "chr(\\d+|X).1kg.phase3.v5a.seximputed.nodups.bim$",
   full.names = TRUE
 )
 
@@ -200,7 +201,7 @@ batchtools::waitForJobs()
 plink_prefixes <- tools::file_path_sans_ext(
   list.files(
     path = proc_dir,
-    pattern = "chr(\\d+|X).1kg.phase3.v5a.nodups.bed$",
+    pattern = "chr(\\d+|X).1kg.phase3.v5a.seximputed.nodups.bed$",
     full.names = TRUE
   ),
   compression = TRUE
@@ -236,7 +237,7 @@ batchtools::waitForJobs()
 plink_prefixes <- tools::file_path_sans_ext(
   list.files(
     path = proc_dir,
-    pattern = "chr([2-9]+|[0-9]{2}|X).1kg.phase3.v5a.nodups.nolongindels.bed$",
+    pattern = "chr([2-9]+|[0-9]{2}|X).1kg.phase3.v5a.seximputed.nodups.nolongindels.bed$",
     full.names = TRUE
   ),
   compression = TRUE
@@ -246,9 +247,7 @@ merge_list_file <- file.path(proc_dir, "merge.list")
 
 writeLines(plink_prefixes, merge_list_file)
 
-first_bed <- file.path(proc_dir, "chr1.1kg.phase3.v5a.nodups.nolongindels.bed")
-first_bim <- file.path(proc_dir, "chr1.1kg.phase3.v5a.nodups.nolongindels.bim")
-first_fam <- file.path(proc_dir, "chrX.1kg.phase3.v5a.imputed.fam")
+first_prefix <- file.path(proc_dir, "chr1.1kg.phase3.v5a.seximputed.nodups.nolongindels")
 
 reg_name <- "1kg_phase3-merge"
 reg <- imbs::load_or_create_registry(
@@ -261,9 +260,7 @@ reg <- imbs::load_or_create_registry(
 
 ids <- batchtools::batchMap(
   fun = imbs::plink_merge_list,
-  bed.file = first_bed,
-  bim.file = first_bim,
-  fam.file = first_fam,
+  bfile = first_prefix,
   output.prefix = file.path(proc_dir, "1kg.phase3.v5a.seximputed.nodups.nolongindels"),
   merge.list = merge_list_file,
   more.args = list(exec = plink_exec)
