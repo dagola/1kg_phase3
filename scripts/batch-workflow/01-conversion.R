@@ -3,7 +3,11 @@
 #                                                                              #
 # 1000 genomes phase 3                                                         #
 # File: 01-conversion.R                                                        #
-# Description: Conversion of 1000G phase 3 VCF files in PLINK binary format    #
+# Description: Conversion of 1000G phase 3 VCF files in PLINK binary format.   #
+#              Follows the instructions on                                     #
+# http://apol1.blogspot.de/2016/10/1000-genomes-project-phase-3-principal.html #
+#              and                                                             #
+# http://apol1.blogspot.de/2014/11/best-practice-for-converting-vcf-files.html #
 #                                                                              #
 ################################################################################
 
@@ -58,7 +62,7 @@ reg <- imbs::load_or_create_registry(
 ids <- batchtools::batchMap(
   fun = imbs::plink_sex_imputation,
   bfile = chrX_prefix,
-  output.prefix = sprintf("%s.imputed", chrX_prefix),
+  output.prefix = sprintf("%s.seximputed", chrX_prefix),
   more.args = list(f.values = c(0.95, 0.95),
                    exec = plink_exec,
                    num.threads = 1)
@@ -268,8 +272,8 @@ ids <- batchtools::batchMap(
 ids[, chunk := 1]
 
 batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "51G",
-                                        partition = "fast", walltime = 10,
+                       resources = list(ntasks = 1, ncpus = 1, memory = 51000,
+                                        partition = "batch",
                                         chunks.as.arrayjobs = TRUE))
 
 batchtools::waitForJobs()
