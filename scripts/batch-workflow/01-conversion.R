@@ -55,7 +55,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file
 )
 
@@ -90,7 +90,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file,
   packages = c("data.table")
 )
@@ -132,7 +132,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file,
   packages = c("data.table")
 )
@@ -168,7 +168,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file,
   packages = c("data.table")
 )
@@ -212,7 +212,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file
 )
 
@@ -254,7 +254,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file
 )
 
