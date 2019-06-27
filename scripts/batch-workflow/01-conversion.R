@@ -42,8 +42,8 @@ ids <- batchtools::batchMap(
 ids[, chunk := 1]
 
 batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "10G",
-                                        partition = "fast", walltime = 59,
+                       resources = list(ntasks = 1, ncpus = 1, memory = 10000,
+                                        partition = "batch", walltime = 0,
                                         chunks.as.arrayjobs = TRUE))
 
 batchtools::waitForJobs()
