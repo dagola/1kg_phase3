@@ -9,11 +9,7 @@ log.file = normalizePath(log.file, winslash = "/", mustWork = FALSE)
 #SBATCH --output=<%= log.file %>
 #SBATCH --error=<%= log.file %>
 ## set resources
-<%=
-if(!is.null(resources$walltime)) {
-  paste0("#SBATCH --time=", resources$walltime)
-}
-%>
+#SBATCH --time=<%= resources$walltime %>
 #SBATCH --ntasks=<%= resources$ntasks %>
 #SBATCH --cpus-per-task=<%= resources$ncpus %>
 #SBATCH --mem=<%= resources$memory %>
@@ -34,13 +30,20 @@ if(!is.null(resources$account)) {
 %>
 ## remove this line if your cluster does not support arrayjobs
 ## #SBATCH --array=1-<%= n.array.jobs %>
-<%= if (array.jobs) sprintf("#SBATCH --array=1-%i", nrow(jobs)) else "" %>
+<%=
+if (array.jobs) {
+  array_option <- sprintf("#SBATCH --array=1-%i", nrow(jobs))
+  if (!is.null(resources$atonce)) {
+    sprintf("%s%%%i", array_option, resources$atonce)
+  } else {
+    array_option
+  }
+}
+%>
 
 ## Initialize work environment like
 ## source /etc/profile
 ## module add ...
-<% r_version <- paste0(R.Version()$major, ".", R.Version()$minor) -%>
-module load R/3.3.1 ##<%= r_version %>
 
 ## Export value of DEBUGME environemnt var to slave
 export DEBUGME=<%= Sys.getenv("DEBUGME") %>
