@@ -16,7 +16,7 @@ source("init.R", chdir = TRUE)
 # Convert VCF to PLINK ----
 vcf_files <- list.files(
   path = input_dir_1kg_phase3,
-  pattern = ".*\\.vcf\\.gz$",
+  pattern = ".*chr.*\\.vcf\\.gz$",
   full.names = TRUE)
 
 reg_name <- "1kg_phase3-create_plink"
