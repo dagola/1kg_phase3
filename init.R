@@ -34,7 +34,7 @@ input_dir <- switch(system,
                     "/imbs/external_data/annotation_and_references/"
 )
 input_dir_1kg_phase3 <- switch(system,
-                               damian.novalocal = file.path(input_dir, "1000G", "release", "20130502"),
+                               damian.novalocal = file.path(input_dir, "1000G"),
                                file.path(input_dir,
                                          "hapmap",
                                          "1000G",
