@@ -29,37 +29,49 @@ dir.create(scripts_dir <- file.path(main_dir, "scripts"),
 dir.create(report_dir <- file.path(main_dir, "report"),
            recursive = TRUE, showWarnings = FALSE)
 
-input_dir <- switch(system,
-                    damian.novalocal = "/data",
-                    "/imbs/external_data/annotation_and_references/"
+input_dir <- switch(
+  system,
+  damian.novalocal = "/data",
+  "/imbs/external_data/annotation_and_references/"
 )
-input_dir_1kg_phase3 <- switch(system,
-                               damian.novalocal = file.path(input_dir, "1000G", "release", "20130502"),
-                               file.path(input_dir,
-                                         "hapmap",
-                                         "1000G",
-                                         "1000GP_Phase3")
+input_dir_1kg_phase3 <- switch(
+  system,
+  damian.novalocal = file.path(input_dir, "1000G", "release", "20130502"),
+  file.path(input_dir,
+            "hapmap",
+            "1000G",
+            "1000GP_Phase3")
 )
-input_dir_human_ref <- switch(system,
-                              damian.novalocal = file.path(input_dir, "GRCh37REF"),
-                              file.path(input_dir,
-                                        "human-ref-genomes",
-                                        "b37")
+input_dir_human_ref <- switch(
+  system,
+  damian.novalocal = file.path(input_dir, "GRCh37REF"),
+  file.path(input_dir,
+            "human-ref-genomes",
+            "b37")
 )
-dir.create(project_dir <- switch(system,
-                                 damian.novalocal = "/data/1kg_phase3",
-                                 "/imbs/projects/1kg_phase3"
-                                 ),
-           recursive = TRUE, showWarnings = FALSE)
+dir.create(
+  path = project_dir <- switch(
+    system,
+    damian.novalocal = file.path(input_dir_1kg_phase3, "converted"),
+    "/imbs/projects/1kg_phase3"
+  ),
+  recursive = TRUE, showWarnings = FALSE
+)
 
-dir.create(proc_dir <- file.path(project_dir, "proc"),
-           recursive = TRUE, showWarnings = FALSE)
+dir.create(
+  path = proc_dir <- file.path(project_dir, "proc"),
+  recursive = TRUE, showWarnings = FALSE
+)
 
-dir.create(reg_dir <- file.path(project_dir, "registries"),
-           recursive = TRUE, showWarnings = FALSE)
+dir.create(
+  path = reg_dir <- file.path(project_dir, "registries"),
+  recursive = TRUE, showWarnings = FALSE
+)
 
-dir.create(output_dir <- file.path(project_dir, "output"),
-           recursive = TRUE, showWarnings = FALSE)
+dir.create(
+  path = output_dir <- file.path(project_dir, "output"),
+  recursive = TRUE, showWarnings = FALSE
+)
 
 ##============================================================================+
 ## rds files ----
