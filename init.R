@@ -7,7 +7,9 @@ system <- Sys.info()["nodename"]
 home <- Sys.getenv("HOME")
 project_name <- "1kg_phase3"
 work_dirs <- list(
-  damian = "documents"
+  damian.novalocal = list(
+    damian = "documents"
+  )
 )
 main_dir <- file.path(home,
                       work_dirs[[system]][[user]],
