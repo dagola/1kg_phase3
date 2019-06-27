@@ -57,5 +57,5 @@ dir.create(
 bcftools_exec <- "/home/damian/bin/bcftools1.9"
 genotype_harmonizer_exec <- "/home/damian/bin/GenotypeHarmonizer1.4.20"
 plink_exec <- "/home/damian/bin/plink1.90b6.10"
-plink2_exec <- "damian.novalocal" = "/home/damian/bin/plink2.0a20190617"
+plink2_exec <- "/home/damian/bin/plink2.0a20190617"
 gcta_exec <- "/home/damian/bin/gcta1.92.2b"
