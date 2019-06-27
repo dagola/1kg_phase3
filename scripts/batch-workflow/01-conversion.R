@@ -32,19 +32,23 @@ reg <- imbs::load_or_create_registry(
 ids <- batchtools::batchMap(
   fun = imbs::plink_normalize_vcf_conversion,
   vcf.file = vcf_files,
-  out.prefix = file.path(proc_dir, tools::file_path_sans_ext(basename(vcf_files), compression = TRUE)),
+  output.prefix = file.path(proc_dir, tools::file_path_sans_ext(basename(vcf_files), compression = TRUE)),
   more.args = list(ref.file = file.path(input_dir_human_ref, "human_g1k_v37.fasta"),
                    bcftools.exec = bcftools_exec,
-                   plink.exec = plink_exec,
-                   num.threads = 1)
+                   plink.exec = plink_exec)
 )
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = 10000,
-                                        partition = "batch", walltime = 0,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 10000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Normalize_Convert", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
