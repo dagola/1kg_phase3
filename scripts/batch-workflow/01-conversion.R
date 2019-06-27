@@ -33,7 +33,7 @@ ids <- batchtools::batchMap(
   fun = imbs::plink_normalize_vcf_conversion,
   vcf.file = vcf_files,
   out.prefix = file.path(proc_dir, tools::file_path_sans_ext(basename(vcf_files), compression = TRUE)),
-  more.args = list(ref.file = file.path(input_dir_human_ref, "human_g1k_v37.fasta"),
+  more.args = list(ref.file = file.path(input_dir_human_reg, "human_g1k_v37.fasta"),
                    bcftools.exec = bcftools_exec,
                    plink.exec = plink_exec,
                    num.threads = 1)
