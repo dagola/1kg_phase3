@@ -24,7 +24,7 @@ reg <- imbs::load_or_create_registry(
   file.dir = file.path(reg_dir, reg_name),
   work.dir = project_dir,
   writeable = TRUE,
-  overwrite = TRUE,
+  overwrite = FALSE,
   conf.file = slurm_btconf_file,
   packages = c("imbs")
 )
@@ -53,7 +53,7 @@ batchtools::submitJobs(
 batchtools::waitForJobs()
 
 # Impute sex using chromosome X ----
-chrX_prefix <- file.path(proc_dir, "chrX.1kg.phase3.v5a")
+chrX_prefix <- file.path(proc_dir, "ALL.chrX.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes")
 
 reg_name <- "1kg_phase3-impute_sex"
 reg <- imbs::load_or_create_registry(
@@ -75,20 +75,24 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "10G",
-                                        partition = "fast", walltime = 10,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 10000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Sex_Imputation", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
 # Check for duplicate markers ----
 bim_files <- list.files(
   path = proc_dir,
-  pattern = "chr(\\d|X)+.1kg.phase3.v5a.bim$",
+  pattern = "ALL\\.chr(\\d|X).*genotypes\\.bim$",
   full.names = TRUE
 )
-
 
 reg_name <- "1kg_phase3-find_duplicate_markers"
 reg <- imbs::load_or_create_registry(
@@ -116,10 +120,15 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "10G",
-                                        partition = "fast", walltime = 10,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 10000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Find_Duplicates", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
@@ -127,7 +136,7 @@ batchtools::waitForJobs()
 plink_prefixes <- tools::file_path_sans_ext(
   list.files(
     path = proc_dir,
-    pattern = "chr(\\d|X)+.1kg.phase3.v5a.bed$",
+    pattern = "chr(\\d|X)+.*genotypes\\.bed$",
     full.names = TRUE
   )
 )
@@ -154,17 +163,22 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "8G",
-                                        partition = "fast", walltime = 10,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 8000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Remove_Duplicates", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
 # Check for very long indels ----
 bim_files <- list.files(
   path = proc_dir,
-  pattern = "chr(\\d+|X).1kg.phase3.v5a.seximputed.nodups.bim$",
+  pattern = "chr(\\d+|X).*genotypes.seximputed.nodups.bim$",
   full.names = TRUE
 )
 
@@ -184,7 +198,7 @@ ids <- batchtools::batchMap(
     bim <- data.table::fread(bim.file)
 
     imbs::system_call("lockfile-create", args = c(longindels.file))
-    cat(bim[nchar(V2) > to.long, V2], file = longindels.file, append = TRUE, sep = "\n")
+    cat(bim[nchar(V2) >= to.long, V2], file = longindels.file, append = TRUE, sep = "\n")
     imbs::system_call("lockfile-remove", args = c(longindels.file))
 
   },
@@ -195,10 +209,15 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "10G",
-                                        partition = "fast", walltime = 10,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 10000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Find_Long_INDELs", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
@@ -206,7 +225,7 @@ batchtools::waitForJobs()
 plink_prefixes <- tools::file_path_sans_ext(
   list.files(
     path = proc_dir,
-    pattern = "chr(\\d+|X).1kg.phase3.v5a.seximputed.nodups.bed$",
+    pattern = "chr(\\d+|X).*genotypes.seximputed.nodups.bed$",
     full.names = TRUE
   ),
   compression = TRUE
@@ -231,10 +250,15 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = "8G",
-                                        partition = "fast", walltime = 10,
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 8000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Remove_Long_INDELs", project_name)
+  )
+)
 
 batchtools::waitForJobs()
 
@@ -242,7 +266,7 @@ batchtools::waitForJobs()
 plink_prefixes <- tools::file_path_sans_ext(
   list.files(
     path = proc_dir,
-    pattern = "chr([2-9]+|[0-9]{2}|X).1kg.phase3.v5a.seximputed.nodups.nolongindels.bed$",
+    pattern = "chr([2-9]+|[0-9]{2}|X).*genotypes.seximputed.nodups.nolongindels.bed$",
     full.names = TRUE
   ),
   compression = TRUE
@@ -252,7 +276,7 @@ merge_list_file <- file.path(proc_dir, "merge.list")
 
 writeLines(plink_prefixes, merge_list_file)
 
-first_prefix <- file.path(proc_dir, "chr1.1kg.phase3.v5a.seximputed.nodups.nolongindels")
+first_prefix <- file.path(proc_dir, "ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.seximputed.nodups.nolongindels")
 
 reg_name <- "1kg_phase3-merge"
 reg <- imbs::load_or_create_registry(
@@ -273,9 +297,14 @@ ids <- batchtools::batchMap(
 
 ids[, chunk := 1]
 
-batchtools::submitJobs(ids = ids,
-                       resources = list(ntasks = 1, ncpus = 1, memory = 51000,
-                                        partition = "batch",
-                                        chunks.as.arrayjobs = TRUE))
+batchtools::submitJobs(
+  ids = ids,
+  resources = list(
+    ntasks = 1, ncpus = 1, memory = 90000,
+    partition = "batch", walltime = 0,
+    chunks.as.arrayjobs = TRUE,
+    name = sprintf("%s_Merge_Chromosomes", project_name)
+  )
+)
 
 batchtools::waitForJobs()
